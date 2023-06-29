@@ -1,431 +1,579 @@
-openapi: 3.0.0
+openapi: "3.0.0"
 info:
-  title: Share-IT - OpenAPI
-  description: API приложения Share-IT
-  version: 1.0.0
+  title: "Share-IT - OpenAPI"
+  description: "API приложения Share-IT"
+  version: "1.0.0"
 servers:
-  - url: http://localhost:8080
+  - url: "http://localhost:8080"
 tags:
-  - description: Работа с пользователями
-    name: Users
-  - description: Работа с предметами
-    name: Items
-  - description: Работа с запросами на бронирование
-    name: Requests
-  - description: Работа с бронированиями
-    name: Bookings
+  - description: "Работа с пользователями"
+    name: "Users"
+  - description: "Работа с предметами"
+    name: "Items"
+  - description: "Работа с запросами на бронирование"
+    name: "Requests"
+  - description: "Работа с бронированиями"
+    name: "Bookings"
 paths:
   /bookings:
     post:
-      summary: Создать запрос на бронирование
-      operationId: bookItem
+      summary: "Создать запрос на бронирование"
+      operationId: "bookItem"
       tags:
-        - Bookings
+        - "Bookings"
       parameters:
-        - name: X-Sharer-User-Id
+        - name: "X-Sharer-User-Id"
           description: ID пользователя сервиса
-          in: header
+          in: "header"
           required: true
           schema:
-            type: number
-            format: int64
+            type: "number"
+            format: "int64"
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/BookingItemRequestDto'
       responses:
-        '200':
-          description: OK
+        "200":
+          description: "OK"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BookingItemResponseDto'
-        '400':
-          description: Ошибка в параметрах запроса
+        "400":
+          description: "Ошибка в параметрах запроса"
+          content:
+            application/json:
+              example:
+                path: "/bookings"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "Нарушение безопасности"
+              schema:
+                $ref: '#/components/schemas/ApiError'
   /bookings/owner:
     get:
-      summary: Получить список запросов на бронирование своих вещей
-      operationId: findOwnItemsBookings
+      summary: "Получить список запросов на бронирование своих вещей"
+      operationId: "findOwnItemsBookings"
       tags:
-        - Bookings
+        - "Bookings"
       parameters:
-        - name: state
-          in: query
-          description: Состояние, в котором находятся искомые предметы
+        - name: "state"
+          in: "query"
+          description: "Состояние, в котором находятся искомые предметы"
           required: true
           schema:
-            type: string
-        - name: from
-          description: >-
-            Количество событий, которые нужно пропустить для формирования
-            текущего набора
-          in: query
+            type: "string"
+        - name: "from"
+          description: "Количество событий, которые нужно пропустить для формирования текущего набора"
+          in: "query"
           required: true
           schema:
-            type: number
-            format: int32
-        - name: size
-          description: Количество событий в наборе
-          in: query
+            type: "number"
+            format: "int32"
+        - name: "size"
+          description: "Количество событий в наборе"
+          in: "query"
           required: true
           schema:
-            type: number
-            format: int32
-        - name: X-Sharer-User-Id
+            type: "number"
+            format: "int32"
+        - name: "X-Sharer-User-Id"
           description: ID пользователя сервиса
-          in: header
+          in: "header"
           required: true
           schema:
-            type: number
-            format: int64
+            type: "number"
+            format: "int64"
       responses:
-        '200':
-          description: OK
+        "200":
+          description: "OK"
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/BookingItemResponseDto'
-        '400':
-          description: Ошибка в параметрах запроса
+        "400":
+          description: "Ошибка в параметрах запроса"
+          content:
+            application/json:
+              example:
+                path: "/bookings/owner"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "Нарушение безопасности"
+              schema:
+                $ref: '#/components/schemas/ApiError'
   /bookings/{bookingId}:
     patch:
-      summary: Подтвердить или отменить запрос на бронирование
-      operationId: review
+      summary: "Подтвердить или отменить запрос на бронирование"
+      operationId: "review"
       tags:
-        - Bookings
+        - "Bookings"
       parameters:
-        - name: bookingId
-          description: ID запроса на бронирование
-          in: path
+        - name: "bookingId"
+          description: "ID запроса на бронирование"
+          in: "path"
           required: true
           schema:
-            type: number
-            format: int64
-        - name: approved
-          description: Подтвердить/Отменить
-          in: query
+            type: "number"
+            format: "int64"
+        - name: "approved"
+          description: "Подтвердить/Отменить"
+          in: "query"
           required: true
           schema:
-            type: boolean
-        - name: X-Sharer-User-Id
+            type: "boolean"
+        - name: "X-Sharer-User-Id"
           description: ID пользователя сервиса
-          in: header
+          in: "header"
           required: true
           schema:
-            type: number
-            format: int64
+            type: "number"
+            format: "int64"
       responses:
-        '200':
-          description: OK
+        "200":
+          description: "OK"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BookingResponseDto'
-        '400':
-          description: Ошибка в параметрах запроса
-        '404':
-          description: ID не найден
+        "400":
+          description: "Ошибка в параметрах запроса"
+          content:
+            application/json:
+              example:
+                path: "/bookings/1"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "Нарушение безопасности"
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "404":
+          description: "ID не найден"
+          content:
+            application/json:
+              example:
+                path: "/bookings/999"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "ID не найден"
+              schema:
+                $ref: '#/components/schemas/ApiError'
   /requests:
     post:
-      summary: Создать запрос на бронирование
-      operationId: createRequest
+      summary: "Создать запрос на бронирование"
+      operationId: "createRequest"
       tags:
-        - Requests
+        - "Requests"
       parameters:
-        - name: X-Sharer-User-Id
+        - name: "X-Sharer-User-Id"
           description: ID пользователя сервиса
-          in: header
+          in: "header"
           required: true
           schema:
-            type: number
-            format: int64
+            type: "number"
+            format: "int64"
       responses:
-        '200':
-          description: OK
+        "200":
+          description: "OK"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ItemRequestResponseDto'
-        '400':
-          description: Ошибка в параметрах запроса
+        "400":
+          description: "Ошибка в параметрах запроса"
+          content:
+            application/json:
+              example:
+                path: "/requests"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "Нарушение безопасности"
+              schema:
+                $ref: '#/components/schemas/ApiError'
   /requests/all:
     get:
-      summary: Получить список всех запросов
-      operationId: readAllUsersRequests
+      summary: "Получить список всех запросов"
+      operationId: "readAllUsersRequests"
       tags:
-        - Requests
+        - "Requests"
       parameters:
-        - name: from
-          description: >-
-            Количество событий, которые нужно пропустить для формирования
-            текущего набора
-          in: query
+        - name: "from"
+          description: "Количество событий, которые нужно пропустить для формирования текущего набора"
+          in: "query"
           required: true
           schema:
-            type: number
-            format: int32
-        - name: size
-          description: Количество событий в наборе
-          in: query
+            type: "number"
+            format: "int32"
+        - name: "size"
+          description: "Количество событий в наборе"
+          in: "query"
           required: true
           schema:
-            type: number
-            format: int32
-        - name: X-Sharer-User-Id
-          description: ID пользователя сервиса
-          in: header
+            type: "number"
+            format: "int32"
+        - name: "X-Sharer-User-Id"
+          description: "ID пользователя сервиса"
+          in: "header"
           required: true
           schema:
-            type: number
-            format: int64
+            type: "number"
+            format: "int64"
       responses:
-        '200':
-          description: OK
+        "200":
+          description: "OK"
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/ItemRequestResponseDto'
-        '400':
-          description: Ошибка в параметрах запроса
+        "400":
+          description: "Ошибка в параметрах запроса"
+          content:
+            application/json:
+              example:
+                path: "/requests/all"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "Нарушение безопасности"
+              schema:
+                $ref: '#/components/schemas/ApiError'
   /requests/{requestId}:
     get:
-      summary: Получить запрос по ID
-      operationId: getRequestById
+      summary: "Получить запрос по ID"
+      operationId: "getRequestById"
       tags:
-        - Requests
+        - "Requests"
       parameters:
-        - name: requestId
-          description: ID запроса на бронирование
-          in: path
+        - name: "requestId"
+          description: "ID запроса на бронирование"
+          in: "path"
           required: true
           schema:
-            type: number
-            format: int64
-        - name: X-Sharer-User-Id
-          description: ID пользователя сервиса
-          in: header
+            type: "number"
+            format: "int64"
+        - name: "X-Sharer-User-Id"
+          description: "ID пользователя сервиса"
+          in: "header"
           required: true
           schema:
-            type: number
-            format: int64
+            type: "number"
+            format: "int64"
       responses:
-        '200':
-          description: OK
+        "200":
+          description: "OK"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ItemRequestResponseDto'
-        '400':
-          description: Ошибка в параметрах запроса
-        '404':
-          description: ID не найден
+        "400":
+          description: "Ошибка в параметрах запроса"
+          content:
+            application/json:
+              example:
+                path: "/requests/1"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "Нарушение безопасности"
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "404":
+          description: "ID не найден"
+          content:
+            application/json:
+              example:
+                path: "/requests/999"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "ID не найден"
+              schema:
+                $ref: '#/components/schemas/ApiError'
   /items:
     post:
-      summary: Создать предмет
-      operationId: create
+      summary: "Создать предмет"
+      operationId: "create"
       tags:
-        - Items
+        - "Items"
       parameters:
-        - name: X-Sharer-User-Id
-          description: ID пользователя сервиса
-          in: header
+        - name: "X-Sharer-User-Id"
+          description: "ID пользователя сервиса"
+          in: "header"
           required: true
           schema:
-            type: number
-            format: int64
+            type: "number"
+            format: "int64"
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/ItemCreateDto'
       responses:
-        '200':
-          description: OK
+        "200":
+          description: "OK"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ItemResponseDto'
-        '400':
-          description: Ошибка в параметрах запроса
+        "400":
+          description: "Ошибка в параметрах запроса"
+          content:
+            application/json:
+              example:
+                path: "/items"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "Нарушение безопасности"
+              schema:
+                $ref: '#/components/schemas/ApiError'
   /items/search:
     get:
-      summary: Найти доступные для бронирования предметы
-      operationId: findAvailableItemsBySearchQuery
+      summary: "Найти доступные для бронирования предметы"
+      operationId: "findAvailableItemsBySearchQuery"
       tags:
-        - Items
+        - "Items"
       parameters:
-        - name: text
-          description: Искомый текст
-          in: query
+        - name: "text"
+          description: "Искомый текст"
+          in: "query"
           required: true
           schema:
-            type: string
+            type: "string"
       responses:
-        '200':
-          description: OK
+        "200":
+          description: "OK"
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/ItemResponseDto'
-        '400':
-          description: Ошибка в параметрах запроса
+        "400":
+          description: "Ошибка в параметрах запроса"
+          content:
+            application/json:
+              example:
+                path: "/items/search"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "Нарушение безопасности"
+              schema:
+                $ref: '#/components/schemas/ApiError'
   /items/{itemId}:
     patch:
-      summary: Обновить
-      operationId: patch
+      summary: "Обновить"
+      operationId: "patch"
       tags:
-        - Items
+        - "Items"
       parameters:
-        - name: itemId
-          description: ID предмета
-          in: path
+        - name: "itemId"
+          description: "ID предмета"
+          in: "path"
           required: true
           schema:
-            type: number
-            format: int64
-        - name: X-Sharer-User-Id
-          description: ID пользователя сервиса
-          in: header
+            type: "number"
+            format: "int64"
+        - name: "X-Sharer-User-Id"
+          description: "ID пользователя сервиса"
+          in: "header"
           required: true
           schema:
-            type: number
-            format: int64
+            type: "number"
+            format: "int64"
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/ItemUpdateDto'
       responses:
-        '200':
-          description: OK
+        "200":
+          description: "OK"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ItemResponseDto'
-        '400':
-          description: Ошибка в параметрах запроса
-        '404':
-          description: ID не найден
+        "400":
+          description: "Ошибка в параметрах запроса"
+          content:
+            application/json:
+              example:
+                path: "/items/1"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "Нарушение безопасности"
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "404":
+          description: "ID не найден"
+          content:
+            application/json:
+              example:
+                path: "/items/999"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "ID не найден"
+              schema:
+                $ref: '#/components/schemas/ApiError'
     delete:
-      summary: Удалить предмет
-      operationId: delete
+      summary: "Удалить предмет"
+      operationId: "delete"
       tags:
-        - Items
+        - "Items"
       parameters:
-        - name: itemId
-          description: ID предмета
-          in: path
+        - name: "itemId"
+          description: "ID предмета"
+          in: "path"
           required: true
           schema:
-            type: number
-            format: int64
-        - name: X-Sharer-User-Id
-          description: ID пользователя сервиса
-          in: header
+            type: "number"
+            format: "int64"
+        - name: "X-Sharer-User-Id"
+          description: "ID пользователя сервиса"
+          in: "header"
           required: true
           schema:
-            type: number
-            format: int64
+            type: "number"
+            format: "int64"
       responses:
-        '200':
-          description: OK
+        "200":
+          description: "OK"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ItemResponseDto'
-        '400':
-          description: Ошибка в параметрах запроса
-        '404':
-          description: ID не найден
+        "400":
+          description: "Ошибка в параметрах запроса"
+          content:
+            application/json:
+              example:
+                path: "/items/1"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "Нарушение безопасности"
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "404":
+          description: "ID не найден"
+          content:
+            application/json:
+              example:
+                path: "/items/999"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "ID не найден"
+              schema:
+                $ref: '#/components/schemas/ApiError'
   /items/{itemId}/comment:
     post:
-      summary: Оставить отзыв
-      operationId: createComment
+      summary: "Оставить отзыв"
+      operationId: "createComment"
       tags:
-        - Items
+        - "Items"
       parameters:
-        - name: itemId
-          description: ID предмета
-          in: path
+        - name: "itemId"
+          description: "ID предмета"
+          in: "path"
           required: true
           schema:
-            type: number
-            format: int64
-        - name: X-Sharer-User-Id
-          description: ID пользователя сервиса
-          in: header
+            type: "number"
+            format: "int64"
+        - name: "X-Sharer-User-Id"
+          description: "ID пользователя сервиса"
+          in: "header"
           required: true
           schema:
-            type: number
-            format: int64
+            type: "number"
+            format: "int64"
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CommentCreateDto'
       responses:
-        '200':
-          description: OK
+        "200":
+          description: "OK"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommentResponseDto'
-        '400':
-          description: Ошибка в параметрах запроса
-        '404':
-          description: ID не найден
+        "400":
+          description: "Ошибка в параметрах запроса"
+          content:
+            application/json:
+              example:
+                path: "/items/1/comment"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "Нарушение безопасности"
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "404":
+          description: "ID не найден"
+          content:
+            application/json:
+              example:
+                path: "/items/999/comment"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "ID не найден"
+              schema:
+                $ref: '#/components/schemas/ApiError'
   /users:
     post:
-      summary: Создать пользователя
-      operationId: createUser
+      summary: "Создать пользователя"
+      operationId: "createUser"
       tags:
-        - Users
+        - "Users"
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/UserCreateDto'
       responses:
-        '200':
-          description: OK
+        "200":
+          description: "OK"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserResponseDto'
-        '400':
-          description: Ошибка в параметрах запроса
+        "400":
+          description: "Ошибка в параметрах запроса"
+          content:
+            application/json:
+              example:
+                path: "/users"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "Нарушение безопасности"
+              schema:
+                $ref: '#/components/schemas/ApiError'
   /users/{userId}:
     delete:
-      summary: Удалить пользователя
-      operationId: deleteUser
+      summary: "Удалить пользователя"
+      operationId: "deleteUser"
       tags:
-        - Users
+        - "Users"
       parameters:
-        - name: userId
-          description: ID пользователя
-          in: path
+        - name: "userId"
+          description: "ID пользователя"
+          in: "path"
           required: true
           schema:
-            type: number
-            format: int64
+            type: "number"
+            format: "int64"
       responses:
-        '200':
-          description: OK
+        "200":
+          description: "OK"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserResponseDto'
-        '400':
-          description: Ошибка в параметрах запроса
-        '404':
-          description: ID не найден
+        "400":
+          description: "Ошибка в параметрах запроса"
+          content:
+            application/json:
+              example:
+                path: "/users/1"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "Ошибка при проверке полей"
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "404":
+          description: "ID не найден"
+          content:
+            application/json:
+              example:
+                path: "/users/999"
+                localDateTime: "2023-06-29 21:17:38"
+                error: "Ошибка при проверке полей"
+              schema:
+                $ref: '#/components/schemas/ApiError'
 components:
   schemas:
     UserCreateDto:
@@ -507,7 +655,7 @@ components:
         id:
           type: integer
           format: int64
-          description: ID бронирования
+          description: "ID бронирования"
         itemId:
           type: integer
           format: int64
@@ -527,7 +675,7 @@ components:
         id:
           type: integer
           format: int64
-          description: ID бронирования
+          description: "ID бронирования"
         item:
           type: object
           $ref: '#/components/schemas/ItemResponseDto'
@@ -587,7 +735,7 @@ components:
       properties:
         name:
           type: string
-          description: Наименование предмета
+          description: "Наименование предмета"
         description:
           type: string
           description: Описание предмета
@@ -623,7 +771,7 @@ components:
           example: 1
         name:
           type: string
-          description: Наименование предмета
+          description: "Наименование предмета"
         description:
           type: string
           description: Описание предмета
@@ -657,3 +805,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ItemResponseDto'
+    ApiError:
+      type: object
+      properties:
+        path:
+          type: string
+          description: "URL, при котором возникла ошибка"
+          example: '/admin/users'
+        localDateTime:
+          type: string
+          description: "Дата и время возникновения ошибки"
+          example: '2023-06-29 21:17:38'
+        error:
+          type: string
+          description: "Текст ошибки"
+          example: "Not Found"
